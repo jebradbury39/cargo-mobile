@@ -255,11 +255,24 @@ impl Env {
         )
     }
 
+    pub fn ar_path(&self, triple: &str) -> Result<PathBuf, MissingToolError> {
+        let ndk_ver = self.version().unwrap_or_default();
+        let bin_path = if ndk_ver.triple.major >= 23 {
+            format!("llvm-{}", Binutil::Ar.as_str())
+        } else {
+            format!("{}-{}", triple, Binutil::Ar.as_str())
+        };
+        MissingToolError::check_file(self.tool_dir()?.join(bin_path), "ar")
+    }
+
     fn readelf_path(&self, triple: &str) -> Result<PathBuf, MissingToolError> {
-        MissingToolError::check_file(
-            self.tool_dir()?.join(format!("{}-readelf", triple)),
-            "readelf",
-        )
+        let ndk_ver = self.version().unwrap_or_default();
+        let bin_path = if ndk_ver.triple.major >= 23 {
+            "llvm-readelf".to_string()
+        } else {
+            format!("{}-readelf", triple)
+        };
+        MissingToolError::check_file(self.tool_dir()?.join(bin_path), "readelf")
     }
 
     pub fn required_libs(
