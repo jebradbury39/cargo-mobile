@@ -182,6 +182,9 @@ impl Env {
                     Err(Error::NdkHomeNotADir)
                 }
             })?;
+
+        println!("cargo-mobile: NDK_HOME={:?}", ndk_home);
+
         let env = Self { ndk_home };
         let version = env
             .version()
