@@ -24,7 +24,7 @@ rustup default stable
 The build will probably take a bit, so feel free to go get a snack or something.
 
 ```bash
-cargo install --git https://github.com/BrainiumLLC/cargo-mobile
+cargo install --git https://github.com/jebradbury39/cargo-mobile
 ```
 
 cargo-mobile is currently supported on macOS and Linux. Note that it's not possible to target iOS on platforms other than macOS! You'll still get to target Android either way.

@@ -54,6 +54,7 @@ impl Compiler {
 #[derive(Clone, Copy, Debug)]
 pub enum Binutil {
     Ar,
+    Ranlib,
     #[allow(dead_code)]
     Ld,
 }
@@ -62,6 +63,7 @@ impl Binutil {
     fn as_str(&self) -> &'static str {
         match self {
             Binutil::Ar => "ar",
+            Binutil::Ranlib => "ranlib",
             Binutil::Ld => "ld",
         }
     }
@@ -266,6 +268,16 @@ impl Env {
             format!("{}-{}", triple, Binutil::Ar.as_str())
         };
         MissingToolError::check_file(self.tool_dir()?.join(bin_path), "ar")
+    }
+
+    pub fn ranlib_path(&self, triple: &str) -> Result<PathBuf, MissingToolError> {
+        let ndk_ver = self.version().unwrap_or_default();
+        let bin_path = if ndk_ver.triple.major >= 23 {
+            format!("llvm-{}", Binutil::Ranlib.as_str())
+        } else {
+            format!("{}-{}", triple, Binutil::Ranlib.as_str())
+        };
+        MissingToolError::check_file(self.tool_dir()?.join(bin_path), "ranlib")
     }
 
     fn readelf_path(&self, triple: &str) -> Result<PathBuf, MissingToolError> {

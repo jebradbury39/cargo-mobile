@@ -261,7 +261,9 @@ impl<'a> Target<'a> {
             )
             .with_env_var(
                 "TARGET_RANLIB",
-                "ranlib",
+                env.ndk
+                    .ranlib_path(self.triple)
+                    .map_err(CompileLibError::MissingTool)?,
             )
             .with_env_var(
                 "TARGET_CC",
