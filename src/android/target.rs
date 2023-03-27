@@ -260,6 +260,10 @@ impl<'a> Target<'a> {
                     .map_err(CompileLibError::MissingTool)?,
             )
             .with_env_var(
+                "TARGET_RANLIB",
+                "ranlib",
+            )
+            .with_env_var(
                 "TARGET_CC",
                 env.ndk
                     .compiler_path(ndk::Compiler::Clang, self.clang_triple(), min_sdk_version)
